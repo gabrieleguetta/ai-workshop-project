@@ -3,6 +3,7 @@
 Final project for **Workshop in Developing Human–AI Collaborative Systems** (BIU 89-6566).
 
 > **Team:** Gabriele Guetta, Guy Gedalia
+
 > **Status:** early development
 
 ## What is this?
