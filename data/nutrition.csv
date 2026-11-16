@@ -1,78 +1,157 @@
-ingredient,kcal,protein_g,carbs_g,fat_g
-Chicken,170,19,0,10
-Chicken Breast,120,22.5,0,2.6
-Chicken Thighs,121,19.7,0,4.1
-Turkey Mince,150,19.7,0,8
-Minced Beef,215,18.6,0,15
-Beef,180,20,0,11
-Lamb,282,16.6,0,23.4
-Salmon,208,20,0,13
-Tuna,116,25.5,0,0.8
-White Fish,82,18,0,0.7
-Prawns,85,20,0.2,0.5
-Eggs,143,12.6,0.7,9.5
-Tofu,76,8,1.9,4.8
-Chickpeas,164,8.9,27.4,2.6
-Lentils,352,24.6,63.4,1.1
-Black Beans,132,8.9,23.7,0.5
-Kidney Beans,127,8.7,22.8,0.5
-Hummus,166,7.9,14.3,9.6
-Milk,61,3.2,4.8,3.3
-Greek Yogurt,73,10,3.9,1.9
-Yogurt,61,3.5,4.7,3.3
-Cottage Cheese,98,11.1,3.4,4.3
-Feta,264,14.2,4.1,21.3
-Cheddar Cheese,403,24.9,1.3,33.1
-Mozzarella,299,22.2,2.2,22.4
-Parmesan,392,35.8,3.2,25.8
-Cream Cheese,342,5.9,4.1,34.2
-Butter,717,0.9,0.1,81.1
-Rice,365,7.1,80,0.7
-Pasta,371,13,75,1.5
-Spaghetti,371,13,75,1.5
-Noodles,384,14.2,71.3,4.4
-Couscous,376,12.8,77.4,0.6
-Bulgur Wheat,342,12.3,75.9,1.3
-Quinoa,368,14.1,64.2,6.1
-Rolled Oats,379,13.2,67.7,6.5
-Bread,265,9,49,3.2
-Pita Bread,275,9.1,55.7,1.2
-Tortillas,304,8,50,8
-Flour,364,10.3,76.3,1
-Potatoes,77,2,17.5,0.1
-Sweet Potatoes,86,1.6,20.1,0.1
-Onion,40,1.1,9.3,0.1
-Garlic,149,6.4,33,0.5
-Tomato,18,0.9,3.9,0.2
-Canned Tomatoes,24,1.2,4.6,0.3
-Tomato Puree,82,4.3,18.9,0.5
-Carrots,41,0.9,9.6,0.2
-Broccoli,34,2.8,6.6,0.4
-Cauliflower,25,1.9,5,0.3
-Spinach,23,2.9,3.6,0.4
-Zucchini,17,1.2,3.1,0.3
-Aubergine,25,1,5.9,0.2
-Red Pepper,31,1,6,0.3
-Cucumber,15,0.7,3.6,0.1
-Lettuce,15,1.4,2.9,0.2
-Mushrooms,22,3.1,3.3,0.3
-Cabbage,25,1.3,5.8,0.1
-Peas,81,5.4,14.5,0.4
-Green Beans,31,1.8,7,0.2
-Avocado,160,2,8.5,14.7
-Lemon,29,1.1,9.3,0.3
-Banana,89,1.1,22.8,0.3
-Apples,52,0.3,13.8,0.2
-Olive Oil,884,0,0,100
-Vegetable Oil,884,0,0,100
-Peanut Butter,588,25,20,50
-Peanuts,567,25.8,16.1,49.2
-Almonds,579,21.2,21.6,49.9
-Walnuts,654,15.2,13.7,65.2
-Cashew Nuts,553,18.2,30.2,43.9
-Tahini,595,17,21.2,53.8
-Coconut Milk,197,2,2.8,21.3
-Almond Milk,15,0.6,0.3,1.2
-Sugar,387,0,100,0
-Honey,304,0.3,82.4,0
-Soy Sauce,53,8.1,4.9,0.6
+ingredient,aliases,kcal,protein_g,carbs_g,fat_g,unit_g,tags
+Chicken,Whole Chicken|Chicken Legs|Chicken Wings,170,19,0,10,1500,meat
+Chicken Breast,Chicken Breasts|Chicken Fillets,120,22.5,0,2.6,170,meat
+Chicken Thighs,Chicken Thigh,121,19.7,0,4.1,110,meat
+Turkey Mince,Turkey,150,19.7,0,8,,meat
+Minced Beef,Ground Beef|Lean Minced Beef|Beef Mince|Lean Minced Steak,215,18.6,0,15,,meat
+Beef,Beef Brisket|Beef Fillet|Stewing Beef|Beef Shin|Steak|Veal|Sirloin Steak|Rump Steak|Braising Steak,180,20,0,11,200,meat
+Lamb,Lamb Mince|Lamb Leg|Lamb Shoulder|Lamb Loin Chops,282,16.6,0,23.4,200,meat
+Pork,Pork Chops|Minced Pork|Ground Pork|Pork Belly|Pork Shoulder,242,27,0,14,200,meat|pork
+Bacon,Pancetta|Bacon Rashers,417,13,1.4,40,25,meat|pork
+Chorizo,,455,24,1.9,38,60,meat|pork
+Ham,Parma Ham|Prosciutto,145,21,1.5,5.5,25,meat|pork
+Sausages,Sausage|Italian Fennel Sausages,301,12,2,27,60,meat|pork
+Salmon,Salmon Fillets|Smoked Salmon,208,20,0,13,,fish
+Tuna,Tuna Steak,116,25.5,0,0.8,,fish
+White Fish,White Fish Fillets|Cod|Haddock|Monkfish|Sea Bass|Tilapia|Smoked Haddock|Salt Cod|Hake|Pollock,82,18,0,0.7,,fish
+Prawns,King Prawns|Tiger Prawns|Shrimp,85,20,0.2,0.5,15,shellfish
+Squid,Baby Squid|Calamari,92,15.6,3.1,1.4,,shellfish
+Eggs,Egg|Free-range Egg|Free-range Eggs,143,12.6,0.7,9.5,50,eggs
+Egg Yolks,Egg Yolk,322,15.9,3.6,26.5,17,eggs
+Egg White,Egg Whites,52,10.9,0.7,0.2,33,eggs
+Tofu,Firm Tofu,76,8,1.9,4.8,,soy
+Chickpeas,Can of chickpeas|Garbanzo Beans,164,8.9,27.4,2.6,,
+Lentils,Red Lentils|Brown Lentils|Green Lentils|French Lentils|Toor Dal,352,24.6,63.4,1.1,,
+Black Beans,,132,8.9,23.7,0.5,,
+Kidney Beans,Red Kidney Beans|Cannellini Beans|Haricot Beans|Butter Beans|Pinto Beans|Borlotti Beans|Dried White Beans|White Beans,127,8.7,22.8,0.5,,
+Hummus,Houmous,166,7.9,14.3,9.6,,sesame
+Milk,Whole Milk|Semi-skimmed Milk|Skimmed Milk,61,3.2,4.8,3.3,,milk
+Condensed Milk,Sweetened Condensed Milk,321,7.9,54.4,8.7,,milk
+Greek Yogurt,Greek Yoghurt,73,10,3.9,1.9,,milk
+Yogurt,Natural Yogurt|Plain Yogurt|Yoghurt|Full Fat Yogurt,61,3.5,4.7,3.3,,milk
+Cream,Double Cream|Heavy Cream|Single Cream|Whipping Cream,340,2.1,2.8,36,,milk
+Sour Cream,Creme Fraiche|Soured Cream,198,2.4,4.6,19,,milk
+Cottage Cheese,,98,11.1,3.4,4.3,,milk
+Feta,Feta Cheese|Cubed Feta Cheese|Goats Cheese,264,14.2,4.1,21.3,,milk
+Cheddar Cheese,Cheddar|Cheese|Mature Cheddar|Cheese Slices|Monterey Jack Cheese|Gruyere|Shredded Mexican Cheese|Gruyère|Emmental|Red Leicester|Gouda Cheese,403,24.9,1.3,33.1,,milk
+Mozzarella,Mozzarella Balls|Mozzarella Cheese,299,22.2,2.2,22.4,,milk
+Parmesan,Parmesan Cheese|Parmigiano-reggiano|Pecorino,392,35.8,3.2,25.8,,milk
+Cream Cheese,Mascarpone|Ricotta,342,5.9,4.1,34.2,,milk
+Butter,Unsalted Butter|Salted Butter|Melted Butter|Chilled Butter|Ghee,717,0.9,0.1,81.1,,milk
+Rice,Basmati Rice|Jasmine Rice|Long Grain Rice|Paella Rice|Sushi Rice|Arborio Rice|Risotto Rice,365,7.1,80,0.7,,
+Pasta,Spaghetti|Penne Rigate|Penne|Macaroni|Farfalle|Rigatoni|Fettuccine|Tagliatelle|Linguine Pasta|Lasagne Sheets|Bowtie Pasta,371,13,75,1.5,,gluten
+Noodles,Rice Noodles|Egg Noodles|Udon Noodles|Rice Vermicelli|Rice Stick Noodles,384,14.2,71.3,4.4,,gluten|eggs
+Couscous,,376,12.8,77.4,0.6,,gluten
+Bulgur Wheat,Bulgur,342,12.3,75.9,1.3,,gluten
+Quinoa,,368,14.1,64.2,6.1,,
+Rolled Oats,Oats|Porridge Oats|Oatmeal,379,13.2,67.7,6.5,,gluten
+Bread,Baguette|Crusty Bread|Ciabatta|Wholegrain Bread|Bread Rolls|Burger Buns|Buns,265,9,49,3.2,35,gluten
+Pita Bread,Pitta Bread|Naan Bread,275,9.1,55.7,1.2,60,gluten
+Tortillas,Flour Tortilla|Flour Tortillas|Corn Tortillas|Wraps,304,8,50,8,45,gluten
+Breadcrumbs,Panko Breadcrumbs,395,13,72,5.3,,gluten
+Puff Pastry,Shortcrust Pastry|Filo Pastry,551,7.4,45,38,,gluten|milk
+Flour,Plain Flour|All Purpose Flour|Self-raising Flour|White Flour|Bread Flour|Strong White Bread Flour|Wholemeal Flour,364,10.3,76.3,1,,gluten
+Cornstarch,Corn Flour|Cornflour|Potato Starch|Starch|Cornmeal|Polenta,381,0.3,91,0.1,,
+Baking Powder,Bicarbonate Of Soda|Baking Soda,53,0,28,0,,
+Yeast,Dried Yeast|Fast Action Yeast,325,40,41,7.6,,
+Potatoes,Potato|Floury Potatoes|Small Potatoes|New Potatoes|Charlotte Potatoes|Yukon Gold Potatoes|Russet Potato|Russet Potatoes|Maris Piper Potatoes,77,2,17.5,0.1,170,
+Sweet Potatoes,Sweet Potato,86,1.6,20.1,0.1,200,
+Onion,Onions|Yellow Onion|Chopped Onion,40,1.1,9.3,0.1,150,
+Spring Onions,Scallions|Green Onions,32,1.8,7.3,0.2,15,
+Shallots,Challots,72,2.5,16.8,0.1,30,
+Leek,Leeks,61,1.5,14,0.3,200,
+Garlic,Garlic Clove|Garlic Cloves|Minced Garlic|Garlic Powder,149,6.4,33,0.5,5,
+Ginger,Ginger Root|Ginger Paste|Ginger Garlic Paste|Lemongrass|Lemongrass Stalks|Galangal,80,1.8,18,0.8,10,
+Chilli,Chillies|Chili|Jalapeno|Scotch Bonnet|Birds Eye Chilli|Birds-eye Chillies|Red Chillies|Green Chillies,40,1.9,8.8,0.4,15,
+Tomato,Tomatoes|Vine Tomatoes|Plum Tomatoes|Cherry Tomatoes|Grape Tomatoes,18,0.9,3.9,0.2,120,
+Canned Tomatoes,Chopped Tomatoes|Tinned Tomatoes|Diced Tomatoes|Passata|Tomato Sauce,24,1.2,4.6,0.3,,
+Tomato Puree,Tomato Paste,82,4.3,18.9,0.5,,
+Carrots,Carrot,41,0.9,9.6,0.2,60,
+Celery,Celery Sticks,16,0.7,3,0.2,40,
+Broccoli,Tenderstem Broccoli,34,2.8,6.6,0.4,300,
+Cauliflower,,25,1.9,5,0.3,600,
+Spinach,Baby Spinach|Kale,23,2.9,3.6,0.4,,
+Zucchini,Courgettes|Courgette,17,1.2,3.1,0.3,200,
+Aubergine,Aubergines|Eggplant|Egg Plants|Baby Aubergine,25,1,5.9,0.2,300,
+Red Pepper,Green Pepper|Yellow Pepper|Bell Pepper|Peppers,31,1,6,0.3,150,
+Cucumber,Persian Cucumber,15,0.7,3.6,0.1,150,
+Lettuce,Little Gem Lettuce|Iceberg Lettuce|Rocket|Salad Leaves,15,1.4,2.9,0.2,300,
+Mushrooms,Chestnut Mushroom|Button Mushrooms|Shiitake Mushrooms|Wild Mushrooms,22,3.1,3.3,0.3,15,
+Cabbage,White Cabbage|Red Cabbage|Sauerkraut|Pak Choi|Bok Choy,25,1.3,5.8,0.1,900,
+Peas,Frozen Peas|Sugar Snap Peas|Broad Beans|Edamame Beans,81,5.4,14.5,0.4,,
+Green Beans,French Beans,31,1.8,7,0.2,,
+Sweetcorn,Corn|Creamed Corn,86,3.3,19,1.4,,
+Pumpkin,Butternut Squash|Squash,26,1,6.5,0.1,1000,
+Beetroot,Cooked Beetroot,43,1.6,9.6,0.2,80,
+Bean Sprouts,,30,3,6,0.2,,
+Olives,Black Olives|Green Olives|Pitted Black Olives|Kalamata Olives,115,0.8,6,10.7,,
+Avocado,Avocados,160,2,8.5,14.7,150,
+Lemon,Lemons|Unwaxed Lemon,29,1.1,9.3,0.3,100,
+Lime,Limes,30,0.7,10.5,0.2,65,
+Lemon Juice,Lime Juice,22,0.4,6.9,0.2,,
+Orange,Oranges,47,0.9,11.8,0.1,130,
+Banana,Bananas,89,1.1,22.8,0.3,120,
+Apples,Apple|Bramley Apples|Braeburn Apples,52,0.3,13.8,0.2,180,
+Raisins,Sultanas|Currants,299,3.1,79,0.5,,
+Olive Oil,Extra Virgin Olive Oil,884,0,0,100,,
+Vegetable Oil,Oil|Sunflower Oil|Rapeseed Oil|Canola Oil|Lard|Shortening|Goose Fat|Duck Fat,884,0,0,100,,
+Sesame Seed Oil,Sesame Oil,884,0,0,100,,sesame
+Sesame Seed,Sesame Seeds,573,17.7,23.4,49.7,,sesame
+Peanut Butter,,588,25,20,50,,peanuts
+Peanuts,Roasted Peanuts,567,25.8,16.1,49.2,,peanuts
+Almonds,Flaked Almonds|Ground Almonds,579,21.2,21.6,49.9,,tree nuts
+Walnuts,Pecan Nuts|Pecans,654,15.2,13.7,65.2,,tree nuts
+Cashew Nuts,Cashews|Pine Nuts|Hazelnuts,553,18.2,30.2,43.9,,tree nuts
+Tahini,,595,17,21.2,53.8,,sesame
+Coconut Milk,Coconut Cream,197,2,2.8,21.3,,
+Desiccated Coconut,Coconut,660,6.9,24,64.5,,
+Almond Milk,,15,0.6,0.3,1.2,,tree nuts
+Dark Chocolate,Plain Chocolate|Chocolate|Milk Chocolate|Dark Chocolate Chips|Chocolate Chips,546,4.9,61,31,,milk
+Cocoa,Cocoa Powder|Cacao,228,19.6,58,13.7,,
+Sugar,Caster Sugar|Granulated Sugar|Brown Sugar|Icing Sugar|Powdered Sugar|Muscovado Sugar|Demerara Sugar|Light Brown Soft Sugar|Dark Brown Soft Sugar|Golden Caster Sugar|Palm Sugar|Jaggery,387,0,100,0,,
+Honey,Clear Honey,304,0.3,82.4,0,,honey
+Maple Syrup,Golden Syrup|Agave Syrup,260,0,67,0,,
+Vanilla Extract,Vanilla|Vanilla Essence,288,0.1,12.7,0.1,,
+Soy Sauce,Dark Soy Sauce|Light Soy Sauce,53,8.1,4.9,0.6,,soy|gluten
+Fish Sauce,Thai Fish Sauce,35,5,3.6,0,,fish
+Oyster Sauce,,51,1.4,11,0.3,,shellfish
+Worcestershire Sauce,,78,0,19.5,0,,fish
+Tomato Ketchup,Ketchup,112,1.7,26,0.1,,
+Mayonnaise,Mayo,680,1,0.6,75,,eggs
+Mustard,Dijon Mustard|English Mustard|Wholegrain Mustard,66,4,5.8,3.3,,
+Hot Sauce,Hotsauce|Tabasco Sauce|Sriracha|Sweet Chilli Sauce|Chilli Sauce,12,0.5,2,0.4,,
+Vinegar,White Vinegar|Red Wine Vinegar|White Wine Vinegar|Rice Vinegar|Apple Cider Vinegar|Balsamic Vinegar|Malt Vinegar|Sherry Vinegar,20,0,0.6,0,,
+Wine,White Wine|Red Wine|Dry White Wine|Sherry|Dry Sherry|Cooking Wine|Rice Wine,83,0.1,2.6,0,,
+Chicken Stock,Chicken Stock Cube|Chicken Broth|Chicken Stock Concentrate,6,0.6,0.4,0.2,10,meat
+Beef Stock,Beef Stock Cube|Beef Stock Cubes|Beef Broth|Hot Beef Stock|Beef Stock Concentrate,7,1.1,0.1,0.2,10,meat
+Vegetable Stock,Vegetable Stock Cube|Vegetable Broth,5,0.2,0.9,0.1,10,
+Salt,Sea Salt|Kosher Salt|Table Salt|Celery Salt|Onion Salt,0,0,0,0,1,
+Water,Warm Water|Cold Water|Boiling Water|Ice,0,0,0,0,,
+Black Pepper,Pepper|Ground Black Pepper|White Pepper,251,10.4,64,3.3,1,
+Chilli Powder,Chili Powder|Cayenne Pepper|Chilli Flakes|Red Chilli Flakes|Red Pepper Flakes|Red Chilli Powder,282,13.5,50,14,1,
+Paprika,Smoked Paprika|Smoky Paprika|Sweet Paprika,282,14,54,13,2,
+Cumin,Ground Cumin|Cumin Seeds,375,17.8,44,22,2,
+Coriander,Cilantro|Coriander Leaves|Fresh Coriander|Ground Coriander|Coriander Seeds,23,2.1,3.7,0.5,10,
+Cinnamon,Ground Cinnamon|Cinnamon Stick,247,4,81,1.2,3,
+Turmeric,Turmeric Powder|Ground Turmeric,312,9.7,67,3.3,2,
+Nutmeg,Ground Nutmeg,525,5.8,49,36,1,
+Allspice,Cloves|Cardamom|Green Cardamom Pods|Star Anise|Saffron|Fennel Seeds|Mustard Seeds|Caraway Seed|Black Cardamom Pods|Juniper Berries,290,8,68,9,1,
+Curry Powder,Garam Masala|Harissa Spice|Ras el hanout|Cajun|Fajita Seasoning|Mixed Spice|Italian Seasoning|Jerk|Five Spice|All-purpose Seasoning|Chinese Five Spice,325,14,58,14,2,
+Parsley,Chopped Parsley|Fresh Parsley|Flat Leaf Parsley|Freshly Chopped Parsley,36,3,6.3,0.8,10,
+Mint,Mint Leaves|Fresh Mint,70,3.8,15,0.9,5,
+Basil,Basil Leaves|Fresh Basil,23,3.2,2.7,0.6,5,
+Thyme,Fresh Thyme|Dried Thyme|Sage|Marjoram|Tarragon,101,5.6,24,1.7,1,
+Rosemary,,131,3.3,21,5.9,1,
+Dill,,43,3.5,7,1.1,5,
+Oregano,Dried Oregano,265,9,69,4.3,1,
+Bay Leaf,Bay Leaves,313,7.6,75,8.4,0.2,
+Chives,,30,3.3,4.4,0.7,5,
+Fennel,Fennel Bulb,31,1.2,7.3,0.2,230,
+Asparagus,,20,2.2,3.9,0.1,20,
+Swede,Turnips|Turnip|Celeriac|Parsnips|Parsnip,37,1.1,8.6,0.2,300,
+Dried Fruit,Dried Apricots|Prunes|Dates|Medjool Dates|Figs|Dried Cranberries,260,2.5,66,0.4,10,
+Mussels,Clams|Oysters|Scallops,86,11.9,3.7,2.2,15,shellfish
+Fish Stock,Fish Stock Cube,8,1.2,0.3,0.3,10,fish
+Curry Paste,Thai Red Curry Paste|Thai Green Curry Paste|Madras Paste|Massaman Curry Paste|Red Curry Paste|Green Curry Paste,140,3,14,8,,
+Tamarind Paste,Tamarind Ball|Tamarind,239,2.8,62.5,0.6,,
+Peanut Oil,Groundnut Oil|Ground Nut Oil,884,0,0,100,,peanuts

@@ -41,8 +41,10 @@ class DisconnectedTools:
 
 
 def build_tools() -> MealTools:
-    """Register Gabriele's implementation here without changing the conversation engine."""
-    return DisconnectedTools()
+    """Gabriele's TheMealDB + local-table implementation (food_tools.py)."""
+    from food_tools import FoodTools  # local import: food_tools imports this module
+
+    return FoodTools()
 
 
 def scale_recipe(recipe: Recipe, servings: int) -> Recipe:
