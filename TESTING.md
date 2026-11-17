@@ -24,12 +24,7 @@ Check: daily protein ≥ 140 g in the table; no main protein two days in a row; 
 - The agent confirms constraints before planning (hard gate).
 - Nothing is added to the menu without the user's choice.
 - Every numbers table is labeled as estimates.
-- Each picked dish shows a real TheMealDB recipe and link, scaled to the slot's diners.
-- Meals with an ingredient missing from `data/*.csv` show nutrition/cost as unavailable, never as a low total. Log the ingredient name so it can be added to the tables.
-- Allergy checks say *cannot verify* when a recipe has unknown ingredients, and always add the packaged-food caveat.
-- The shopping list merges the same ingredient across meals (e.g. onions in two dishes) and is marked partial when a quantity is missing ("to taste", "chopped").
-
-Run with real tools: set up `.env` (see README), then `python main.py`. The default `pytest` suite never calls TheMealDB.
+- Ingredients the tools don't know (`"found": false`) are retried with a suggested name or clearly estimated, never silently dropped from totals.
 
 ## Bug log
 

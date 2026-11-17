@@ -12,4 +12,4 @@ select = ["E4", "E7", "E9", "F", "I", "B"]
 [tool.mypy]
 python_version = "3.9"
 check_untyped_defs = true
-files = ["main.py", "agent.py", "models.py", "state.py", "tools.py", "food_tools.py", "checks.py", "rendering.py", "providers.py"]
+files = ["main.py", "agent.py", "models.py", "state.py", "tools.py", "checks.py", "rendering.py", "providers.py"]

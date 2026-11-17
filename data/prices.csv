@@ -6,19 +6,11 @@ Turkey Mince,50
 Minced Beef,65
 Beef,80
 Lamb,110
-Pork,55
-Bacon,80
-Chorizo,90
-Ham,70
-Sausages,50
 Salmon,110
 Tuna,60
 White Fish,60
 Prawns,90
-Squid,70
 Eggs,20
-Egg Yolks,20
-Egg White,20
 Tofu,35
 Chickpeas,15
 Lentils,14
@@ -26,11 +18,8 @@ Black Beans,18
 Kidney Beans,18
 Hummus,30
 Milk,7
-Condensed Milk,30
 Greek Yogurt,28
 Yogurt,15
-Cream,30
-Sour Cream,30
 Cottage Cheese,25
 Feta,55
 Cheddar Cheese,70
@@ -40,6 +29,7 @@ Cream Cheese,40
 Butter,50
 Rice,10
 Pasta,10
+Spaghetti,10
 Noodles,20
 Couscous,14
 Bulgur Wheat,12
@@ -48,26 +38,15 @@ Rolled Oats,12
 Bread,15
 Pita Bread,15
 Tortillas,30
-Breadcrumbs,20
-Puff Pastry,35
 Flour,5
-Cornstarch,15
-Baking Powder,40
-Yeast,60
 Potatoes,5
 Sweet Potatoes,8
 Onion,5
-Spring Onions,20
-Shallots,20
-Leek,12
 Garlic,30
-Ginger,25
-Chilli,25
 Tomato,7
 Canned Tomatoes,12
 Tomato Puree,20
 Carrots,5
-Celery,10
 Broccoli,20
 Cauliflower,10
 Spinach,25
@@ -80,23 +59,12 @@ Mushrooms,30
 Cabbage,5
 Peas,15
 Green Beans,18
-Sweetcorn,15
-Pumpkin,8
-Beetroot,8
-Bean Sprouts,20
-Olives,35
 Avocado,20
 Lemon,9
-Lime,15
-Lemon Juice,15
-Orange,7
 Banana,9
 Apples,10
-Raisins,35
 Olive Oil,40
 Vegetable Oil,12
-Sesame Seed Oil,60
-Sesame Seed,40
 Peanut Butter,45
 Peanuts,35
 Almonds,70
@@ -104,54 +72,7 @@ Walnuts,70
 Cashew Nuts,80
 Tahini,30
 Coconut Milk,25
-Desiccated Coconut,40
 Almond Milk,15
-Dark Chocolate,70
-Cocoa,60
 Sugar,5
 Honey,45
-Maple Syrup,80
-Vanilla Extract,300
 Soy Sauce,30
-Fish Sauce,40
-Oyster Sauce,40
-Worcestershire Sauce,50
-Tomato Ketchup,15
-Mayonnaise,25
-Mustard,30
-Hot Sauce,60
-Vinegar,10
-Wine,40
-Chicken Stock,10
-Beef Stock,10
-Vegetable Stock,10
-Salt,3
-Water,0
-Black Pepper,100
-Chilli Powder,80
-Paprika,80
-Cumin,80
-Coriander,40
-Cinnamon,80
-Turmeric,60
-Nutmeg,200
-Allspice,150
-Curry Powder,80
-Parsley,40
-Mint,40
-Basil,60
-Thyme,100
-Rosemary,100
-Dill,40
-Oregano,100
-Bay Leaf,150
-Chives,60
-Fennel,12
-Asparagus,40
-Swede,10
-Dried Fruit,45
-Mussels,60
-Fish Stock,10
-Curry Paste,60
-Tamarind Paste,40
-Peanut Oil,25
