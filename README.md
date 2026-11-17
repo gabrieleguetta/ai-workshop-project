@@ -79,48 +79,22 @@ tolerance. Preparation times only verify their evidenced serving quantity. Gener
 cannot establish package allergy safety or absence of cross-contamination. This is general
 meal planning, not medical coaching.
 
-## Food tools and data
+## Current integration status
 
-`tools.build_tools()` registers `FoodTools` from `food_tools.py`. Python calls it during drafting:
-it searches a recipe, scales it to the slot's diners, then estimates nutrition and cost. The LLM
-never calls these tools or supplies their numbers.
+**Recipe, nutrition and price integrations are deliberately disconnected.** A configured real LLM
+still runs the conversation and manages provisional meal choices. Recipe/time, nutrition and cost
+remain unavailable or pending. The user can approve the menu, while technical checks remain
+unverified. Recipes and a **partial** shopping list are explicitly marked incomplete. No quantities,
+sources, macros or prices are fabricated. There are no live food-service requests, production
+datasets or simulated services in the application.
 
-| Tool | Source | Returns |
-| --- | --- | --- |
-| `search_recipes` | [TheMealDB](https://www.themealdb.com/api.php) (free, no key, 10 s timeout) | Up to 5 recipes with ingredients, parsed quantities, instructions and a source link |
-| `get_nutrition` | `data/nutrition.csv` (~145 ingredients, per 100 g raw, USDA-based) | kcal and protein per ingredient and in total |
-| `get_prices` | `data/prices.csv` (same ingredients, ₪/kg) | Consumption cost per ingredient and in total |
+Once connected evidence exists, Python scales quantities, requests nutrition/prices and checks
+constraints during drafting. Menu, recipes and shopping list derive from the same state revision.
+Compatible normalized ingredients combine in code; incompatible units and unknown raw/cooked
+bases remain separate. Replacements regenerate shared ingredients correctly. Consumption cost
+and whole-package checkout totals remain distinct.
 
-How the data is mapped:
-
-- **Search:** first by dish name, then by the dish's longer words ("chickpea curry" → "chickpea"),
-  then by main ingredient. Candidates that clash with known allergies, exclusions, dislikes or
-  dietary needs are ranked last. After that, recipes the tables fully cover come first.
-- **Ingredient names** match by name, alias and plural ("Red Onions" → Onion, "Plain Flour" →
-  Flour). Descriptor words are dropped only as a fallback. There is no fuzzy guessing, so
-  "Chicken Stock" never becomes chicken.
-- **Measures** such as "1 1/2 cups", "2-3 tbsp", "800g", "2 cloves" and "juice of 1" are parsed into
-  quantity and unit. The original measure is kept, and the conversion to grams is flagged as an
-  estimate. Counted items ("2 onions") use a per-item weight from the table.
-- **Allergens and diet tags** (vegetarian, vegan, pescatarian, dairy-free, gluten-free, nut-free) come
-  from table tags. If any ingredient is unknown, they are marked incomplete, so checks report
-  *cannot verify* instead of a false pass.
-- **Missing data stays missing.** An unknown ingredient or quantity makes the meal's total `null`
-  with status `missing_data`, never a partial sum presented as complete.
-
-Known limits:
-
-- **Servings are assumed.** TheMealDB gives no servings, so every recipe is treated as 4 servings
-  before scaling.
-- **Rough gram conversions.** One cup is taken as 240 g for every food.
-- **No cooking times.** TheMealDB has none, so time targets show *cannot verify*.
-- **Prices are estimates,** not live supermarket quotes. They are always shown as estimates.
-- **Partial coverage.** About 45% of TheMealDB's non-dessert recipes get complete nutrition.
-  The rest show *unavailable* until missing ingredients are added to the CSVs. To add one, put a
-  row (with aliases) in `nutrition.csv` and a matching row in `prices.csv`.
-
-See [Gabriele's handoff](docs/GABRIELE_HANDOFF.md) for the contract and
-[TESTING.md](TESTING.md) for the end-to-end personas and bug log.
+See [Gabriele's handoff](docs/GABRIELE_HANDOFF.md) for implementation and registration details.
 
 ## Development and tests
 
@@ -149,8 +123,6 @@ real end-to-end persona evaluation. Exact executed commands and counts are recor
 | `models.py` | Validated in-memory state and evidence contracts |
 | `state.py` | Transactional actions, approvals and replacement authorization |
 | `tools.py` | Three interfaces, disconnected defaults, scaling and registration |
-| `food_tools.py` | TheMealDB search, measure parsing, nutrition and price estimates |
-| `data/` | `nutrition.csv` and `prices.csv` ingredient tables |
 | `checks.py` | Deterministic constraints, scope overrides and completeness |
 | `rendering.py` | Menu, recipes and consolidated shopping list from state |
 | `tests/` | Credential-free unit and internal integration tests |
@@ -164,5 +136,4 @@ No database, saved preference profile, web UI or multi-agent system is used.
 
 Compare the agent with a plain chat baseline in user sessions, measuring plan satisfaction,
 sense of control, time to a finished plan and adherence to the collaboration workflow.
-End-to-end persona runs with the connected tools are tracked in [TESTING.md](TESTING.md);
-the user study remains future work.
+Real connected-tool evaluation and the user study remain future work.
