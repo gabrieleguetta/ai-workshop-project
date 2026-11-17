@@ -30,3 +30,20 @@ No real recipe/nutrition/price integrations or real end-to-end persona tests ran
 intentionally disconnected and remain Gabriele's responsibility, including the vegetarian on a
 tight budget, nut-allergy user and high-protein runner. Internal fixtures do not count as those
 real scenarios. There are no skipped failing tests or external food calls in the default suite.
+
+## Food tools (Gabriele, Nov 16 2026)
+
+Environment: Windows, Python 3.14.0, pytest 8.4.2, fresh `.venv` from `requirements-dev.txt`.
+
+| Exact command | Actual result |
+| --- | --- |
+| `.venv\Scripts\python -m pytest -q` | **151 passed** (126 existing + 25 in `tests/test_food_tools.py`) |
+| `.venv\Scripts\python -m ruff check .` / `ruff format --check .` | Passed |
+| `.venv\Scripts\python -m mypy --python-version 3.10` | No issues in 9 source files (plain `mypy` with the configured 3.9 target fails inside the installed pydantic, which uses 3.10 syntax) |
+
+`tests/test_food_tools.py` replaces TheMealDB with fakes, covering mapping, units, timeout/error,
+not-found and partial results. A live check outside pytest called TheMealDB for "Shakshuka"
+(vegetarian), "chickpea curry" (nut allergy) and "chicken breast" (no pork). All returned recipes
+with complete nutrition and price estimates. Coverage over TheMealDB's 623 non-dessert recipes:
+277 have complete nutrition and price estimates. The three persona runs with a live model have
+not been done yet (see TESTING.md).
