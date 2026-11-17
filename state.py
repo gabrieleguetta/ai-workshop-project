@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from typing import Literal, Optional
 
 from pydantic import Field
@@ -24,7 +23,7 @@ from models import (
     Slot,
     Turn,
 )
-from rendering import menu, outputs, summary, tr
+from rendering import menu, outputs, summary
 from tools import MealDataRequest, MealTools, RecipeQuery, scale_recipe
 
 
@@ -101,8 +100,6 @@ class StateManager:
     def add_turn(self, text: str) -> Turn:
         turn = Turn(id=len(self.state.turns) + 1, text=text)
         self.state.turns.append(turn)
-        if re.search(r"[\u0590-\u05ff]", text):
-            self.state.language = "he"
         return turn
 
     def evidence(self, action: Evidence) -> None:
@@ -162,11 +159,12 @@ class StateManager:
         s.pending = None
         if affected:
             self.pending("revisit", {key: s.meals[key].version for key in affected})
-            return self.affected_text(affected) + "\n" + tr(
-                s,
-                "Should we revisit these earlier meals too? They have not been changed.",
-                "האם לעבור גם על הארוחות הקודמות האלה? הן עדיין לא השתנו.",
-            ), True
+            return (
+                self.affected_text(affected)
+                + "\n"
+                + "Should we revisit these earlier meals too? They have not been changed.",
+                True,
+            )
         return "Requirements updated", False
 
     def on_framework(self, action: FrameworkAction) -> tuple[str, bool]:
@@ -228,11 +226,7 @@ class StateManager:
     def on_preference(self, action: PreferenceAction) -> tuple[str, bool]:
         s = self.state
         if action.scope is None:
-            return tr(
-                s,
-                "Does that apply generally, or just to this day/meal?",
-                "זה תקף באופן כללי, או רק ליום או לארוחה הזאת?",
-            ), True
+            return "Does that apply generally, or just to this day/meal?", True
         self.validate_scope(action.scope)
         previous = next((p for p in s.preferences if p.id == action.id), None)
         if previous and all(
@@ -263,11 +257,7 @@ class StateManager:
         if s.summary_approved == s.requirements_version:
             return "The current summary is already approved", False
         self.pending("summary")
-        return summary(s) + "\n" + tr(
-            s,
-            "Is this correct, or would you like to change anything?",
-            "האם הסיכום נכון, או שתרצה לשנות משהו?",
-        ), True
+        return summary(s) + "\n" + "Is this correct, or would you like to change anything?", True
 
     def affected_text(self, keys) -> str:
         s = self.state
@@ -315,11 +305,7 @@ class StateManager:
         s.pending = None
         if action.decision == "reject":
             s.replacement = None
-            message = tr(
-                s,
-                "Kept the current choices. What would you like to change or plan next?",
-                "הבחירות הקיימות נשמרו. מה תרצה לשנות או לתכנן בהמשך?",
-            )
+            message = "Kept the current choices. What would you like to change or plan next?"
             if pending.kind in ("revisit", "replacement"):
                 message += "\n" + (outputs(s) if self.complete() else menu(s))
             return message, True
@@ -334,19 +320,16 @@ class StateManager:
             if self.complete():
                 return outputs(s), True
             if s.mode is None and len(self.days()) > 1:
-                return tr(
-                    s,
-                    "Continue one day at a time, or see the remaining days together?",
-                    "להמשיך יום בכל פעם, או לראות את שאר הימים יחד?",
-                ), True
+                return "Continue one day at a time, or see the remaining days together?", True
             return "Menu selection approved; technical checks remain separate", False
         if pending.kind == "revisit":
             self.pending("replacement", pending.meals)
-            return self.affected_text(pending.meals) + "\n" + tr(
-                s,
-                "What should replace these meals, or may I choose replacements for this list?",
-                "במה להחליף את הארוחות האלה, או שאבחר חלופות לרשימה הזאת?",
-            ), True
+            return (
+                self.affected_text(pending.meals)
+                + "\n"
+                + "What should replace these meals, or may I choose replacements for this list?",
+                True,
+            )
         if action.decision == "choose":
             if set(action.choices) != set(pending.meals):
                 raise TransitionError("Specify replacements for exactly the listed meals")
@@ -473,6 +456,9 @@ class StateManager:
                 raise TransitionError("Selected recipe ID was not returned by the recipe tool")
             meal.source_recipe = candidates[0].model_copy(deep=True)
             meal.recipe = scale_recipe(meal.source_recipe, slot.diners)
+            if meal.recipe.name.casefold() != dish.name.casefold():
+                # The model wrote its description for the dish it asked for, not this recipe.
+                meal.description = f"Closest recipe found for the requested “{dish.name}”."
             meal.name = meal.recipe.name
         self.derived(meal, slot)
         return meal
@@ -552,11 +538,9 @@ class StateManager:
                     outputs(s) if self.complete() else menu(s)
                 ), True
         self.pending("menu", {key: s.meals[key].version for key in keys})
-        return "\n".join(changes) + "\n" + menu(s) + "\n" + tr(
-            s,
-            "What suits you, and what would you change? You can approve this proposal.",
-            "מה מתאים לך ומה תרצה לשנות? אפשר לאשר את ההצעה הזאת.",
-        ), True
+        return "\n".join(changes) + "\n" + menu(
+            s
+        ) + "\n" + "What suits you, and what would you change? You can approve this proposal.", True
 
     def update_stage(self) -> None:
         s = self.state

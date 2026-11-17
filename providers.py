@@ -42,6 +42,11 @@ def parse_response(text: str) -> Response:
 
 
 def safe_failure(text: str, provider: str, code: Optional[int] = None) -> ProviderError:
+    reason = ""
+    try:  # OpenRouter's own error message (never contains the key), e.g. a guardrail block
+        reason = str(json.loads(text.split(" ", 1)[1])["error"]["message"]).split("\n")[0][:200]
+    except Exception:
+        pass
     text = text.casefold()
     if any(
         word in text
@@ -74,6 +79,7 @@ def safe_failure(text: str, provider: str, code: Optional[int] = None) -> Provid
         f"{provider}: request failed"
         + (f" (exit/status {code})" if code is not None else "")
         + ". Check the connection, model availability, and provider setup."
+        + (f" Reason: {reason}" if reason else "")
     )
 
 

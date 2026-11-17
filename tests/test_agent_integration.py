@@ -54,9 +54,9 @@ def test_actual_loop_handles_first_day_then_contextual_approval_and_final_output
     agent.manager = ready(1, tools=supplied)
     first = agent.reply("Suggest dinner")
     assert "Soup" in first and "draft" in first
-    final = agent.reply("כן, מתאים")
+    final = agent.reply("Yes, looks good")
     assert agent.manager.complete()
-    assert "רשימת קניות" in final and "carrot: 100 g" in final
+    assert "Shopping list" in final and "carrot: 100 g" in final
     assert "fixture:recipe" in final
     assert [name for name, _ in supplied.calls] == ["recipe", "nutrition", "prices"]
 
@@ -190,3 +190,21 @@ def test_loop_supports_complete_scoped_earlier_meal_delegation():
     assert "Soup → Salad" in result
     assert agent.manager.state.meals["d1-dinner"].approved
     assert agent.manager.state.meals["d1-lunch"].version == original_version
+
+
+def test_summary_is_shown_by_code_when_model_only_claims_it():
+    model = ScriptedModel(
+        [
+            Response(
+                message="Please approve the summary on screen.",
+                action="respond",
+                arguments_json="{}",
+            )
+        ]
+    )
+    agent = Agent(model, DisconnectedTools())
+    agent.manager = ready(1)
+    agent.manager.state.summary_approved = None  # answers complete, summary not yet shown
+    agent.manager.update_stage()
+    text = agent.reply("Done, those are all my answers")
+    assert "Planning summary" in text and agent.manager.state.pending.kind == "summary"
