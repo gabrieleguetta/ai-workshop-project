@@ -95,6 +95,7 @@ class OpenRouterProvider:
             )
         self.key, self.model, self.timeout = key, model, timeout
         self.client = client
+        self.name = f"OpenRouter ({model})"
 
     def complete(self, messages: list[dict[str, str]]) -> Response:
         body = {
@@ -213,10 +214,11 @@ class CodexProvider:
             raise ProviderError(
                 "Codex is not signed in. Run `codex login`, then `codex login status`."
             )
+        model = self.model or "CLI default model"
         if "api key" in status or "api_key" in status or os.environ.get("CODEX_API_KEY"):
-            self.name = "Codex (API-key authentication; usage-based billing)"
+            self.name = f"Codex ({model}; API-key authentication; usage-based billing)"
         elif "chatgpt" in status:
-            self.name = "Codex (ChatGPT authentication; account usage limits apply)"
+            self.name = f"Codex ({model}; ChatGPT authentication; account usage limits apply)"
         else:
             raise ProviderError("Codex login method is unrecognized. Check `codex login status`.")
 

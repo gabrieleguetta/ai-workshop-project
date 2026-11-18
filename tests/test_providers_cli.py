@@ -43,14 +43,14 @@ def result(stdout="", stderr="", code=0):
         (
             "auto",
             {"OPENROUTER_API_KEY": "test-key", "OPENROUTER_MODEL": "chosen-model"},
-            "OpenRouter",
+            "OpenRouter (chosen-model)",
         ),
         ("auto", {}, "fake-codex"),
         ("codex", {"OPENROUTER_API_KEY": "test-key"}, "fake-codex"),
         (
             "openrouter",
             {"OPENROUTER_API_KEY": "test-key", "OPENROUTER_MODEL": "chosen-model"},
-            "OpenRouter",
+            "OpenRouter (chosen-model)",
         ),
     ],
 )
