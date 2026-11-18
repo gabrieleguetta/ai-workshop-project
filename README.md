@@ -118,7 +118,7 @@ Known limits:
 - **Rough gram conversions.** One cup is taken as 240 g for every food.
 - **No cooking times.** TheMealDB has none, so time targets show *cannot verify*.
 - **Prices are estimates,** not live supermarket quotes. They are always shown as estimates.
-- **Partial coverage.** About 45% of TheMealDB's non-dessert recipes get complete nutrition.
+- **Partial coverage.** About 58% (359 of 623) of TheMealDB's non-dessert recipes get complete nutrition.
   The rest show *unavailable* until missing ingredients are added to the CSVs. To add one, put a
   row (with aliases) in `nutrition.csv` and a matching row in `prices.csv`.
 
