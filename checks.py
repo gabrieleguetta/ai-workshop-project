@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Literal, Optional
 
 from models import Check, Meal, Scope, Session, Slot, Target
@@ -113,7 +114,11 @@ def check_meal(session: Session, meal: Meal, slot: Slot) -> list[Check]:
     recipe = meal.recipe
     results: list[Check] = []
     # Names and provider allergen metadata can establish a conflict, never package safety.
-    names = [meal.name.casefold()] + [tag.casefold() for tag in meal.tags]
+    # Skip negated model tags: "no mushrooms" / "nut-free" must not count as containing them.
+    negated = re.compile(r"\b(no|without|free)\b|-free\b")
+    names = [meal.name.casefold()] + [
+        t.casefold() for t in meal.tags if not negated.search(t.casefold())
+    ]
     if recipe:
         names += [i.name.casefold() for i in recipe.ingredients]
         names += [a.casefold() for i in recipe.ingredients for a in i.allergens]

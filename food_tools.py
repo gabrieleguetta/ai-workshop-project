@@ -256,13 +256,67 @@ def _get(endpoint: str, **params: str) -> list[dict]:
         return json.load(response).get("meals") or []
 
 
+STOP = {
+    "with",
+    "and",
+    "the",
+    "served",
+    "style",
+    "fresh",
+    "quick",
+    "easy",
+    "simple",
+    "mild",
+    "warm",
+    "light",
+    "classic",
+    "homemade",
+    "side",
+    "some",
+    "plus",
+}
+METHOD = {
+    "grilled",
+    "baked",
+    "roasted",
+    "fried",
+    "stuffed",
+    "slow",
+    "spicy",
+    "creamy",
+    "crispy",
+    "pan",
+    "herb",
+    "herbs",
+    "skewers",
+    "bowl",
+    "bowls",
+}
+
+
+def _score(meal: dict, words: list[str]) -> float:
+    """Query words in the recipe name (2; cooking words 0.5) or its ingredients (1)."""
+    name = meal["strMeal"].casefold()
+    ings = " ".join(str(meal.get(f"strIngredient{i}") or "") for i in range(1, 21)).casefold()
+    score = 0.0
+    for w in words:
+        pattern = rf"\b{re.escape(w)}(e?s)?\b"  # whole word: "lemon" never matches "lemongrass"
+        if re.search(pattern, name):
+            score += 0.5 if w in METHOD else 2
+        elif re.search(pattern, ings):
+            score += 1
+    return score
+
+
 def _search(dish: str) -> list[dict]:
     meals = _get("search.php", s=dish)
-    words = sorted((w for w in re.findall(r"[a-zA-Z]+", dish) if len(w) > 3), key=len, reverse=True)
-    for word in words[:3]:  # "Chickpea curry with rice" -> try "chickpea", "curry"
-        if meals:
-            break
-        meals = _get("search.php", s=word)
+    if meals:
+        return meals[:10]
+    words = [w for w in re.findall(r"[a-z]+", dish.casefold()) if len(w) > 2 and w not in STOP]
+    # ponytail: word-overlap ranking; a real dish->recipe matcher would need TheMealDB categories
+    found = {m["idMeal"]: m for w in words[:5] for m in _get("search.php", s=w)}
+    ranked = sorted(found.values(), key=lambda m: _score(m, words), reverse=True)
+    meals = [m for m in ranked if _score(m, words) >= 2]  # at least one real (non-method) match
     if not meals:  # dish may be a main ingredient, e.g. "chicken breast"
         ids = [m["idMeal"] for m in _get("filter.php", i=dish.replace(" ", "_"))[:5]]
         meals = [m for i in ids for m in _get("lookup.php", i=i)[:1]]
@@ -292,11 +346,9 @@ class FoodTools:
     def search_recipes(self, query: RecipeQuery) -> RecipeResult:
         try:
             meals = _search(query.dish)
-            # Fewest constraint clashes first, then recipes our tables fully cover.
-            recipes = sorted(
-                (to_recipe(m) for m in meals),
-                key=lambda r: (_conflicts(r, query), not r.allergens_complete),
-            )
+            # Fewest constraint clashes first; otherwise keep _search's relevance order
+            # (preferring table-covered recipes picked lamb for "chicken skewers").
+            recipes = sorted((to_recipe(m) for m in meals), key=lambda r: _conflicts(r, query))
         except Exception:  # network/API/format failure must never crash the chat
             return RecipeResult(status="error", missing=["recipe search failed"])
         if not recipes:

@@ -16,7 +16,7 @@ from providers import (
     select_provider,
 )
 
-RESPONSE = Response(message="אילו ארוחות תרצה?", action="respond", arguments_json="{}")
+RESPONSE = Response(message="Which meals would you like?", action="respond", arguments_json="{}")
 
 
 def events(response=RESPONSE):
@@ -43,14 +43,14 @@ def result(stdout="", stderr="", code=0):
         (
             "auto",
             {"OPENROUTER_API_KEY": "test-key", "OPENROUTER_MODEL": "chosen-model"},
-            "OpenRouter",
+            "OpenRouter (chosen-model)",
         ),
         ("auto", {}, "fake-codex"),
         ("codex", {"OPENROUTER_API_KEY": "test-key"}, "fake-codex"),
         (
             "openrouter",
             {"OPENROUTER_API_KEY": "test-key", "OPENROUTER_MODEL": "chosen-model"},
-            "OpenRouter",
+            "OpenRouter (chosen-model)",
         ),
     ],
 )
@@ -238,7 +238,7 @@ def test_cli_missing_setup_has_no_traceback_or_secret():
     assert "codex login" in output[0] and "Traceback" not in "".join(output)
 
 
-@pytest.mark.parametrize("exit_mode", ["exit", "יציאה", "EOF", "interrupt"])
+@pytest.mark.parametrize("exit_mode", ["exit", "quit", "EOF", "interrupt"])
 def test_cli_starts_and_exits_cleanly(exit_mode):
     output = []
 

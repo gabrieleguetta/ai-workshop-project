@@ -21,7 +21,7 @@ def main(
     output_fn: Callable = print,
     provider_factory: Callable = select_provider,
 ) -> int:
-    parser = argparse.ArgumentParser(description="Collaborative Nutrition Planner / מתכנן ארוחות")
+    parser = argparse.ArgumentParser(description="Collaborative Nutrition Planner")
     parser.add_argument("--provider", choices=("auto", "openrouter", "codex"), default=None)
     args = parser.parse_args(argv)
     load_dotenv(Path(__file__).with_name(".env"), override=False)
@@ -31,20 +31,17 @@ def main(
         output_fn(f"Setup: {error}")
         return 2
     output_fn(f"Nutrition Planner — {provider.name}")
-    output_fn("Fresh session. Type exit to leave. / תכנון חדש. אפשר לכתוב יציאה כדי לסיים.")
-    output_fn(
-        "What days and meals would you like to plan, and for how many diners?\n"
-        "אילו ימים וארוחות תרצה לתכנן, ולכמה סועדים?"
-    )
+    output_fn("Fresh session. Type exit to leave.")
+    output_fn("What days and meals would you like to plan, and for how many diners?")
     agent = Agent(provider, build_tools())
     while True:
         try:
-            text = input_fn("You / אתה: ").strip()
+            text = input_fn("You: ").strip()
         except (EOFError, KeyboardInterrupt):
-            output_fn("Goodbye / להתראות")
+            output_fn("Goodbye")
             return 0
-        if text.casefold() in ("exit", "quit", "יציאה", "להתראות"):
-            output_fn("Goodbye / להתראות")
+        if text.casefold() in ("exit", "quit"):
+            output_fn("Goodbye")
             return 0
         if not text:
             continue
@@ -53,7 +50,7 @@ def main(
         except ProviderError as error:
             output_fn(str(error))
         except KeyboardInterrupt:
-            output_fn("Goodbye / להתראות")
+            output_fn("Goodbye")
             return 0
 
 

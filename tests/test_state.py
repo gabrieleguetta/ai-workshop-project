@@ -98,7 +98,7 @@ def test_summary_approval_requires_new_actual_user_turn():
             {**ev, "target": pending.id, "revision": pending.revision, "decision": "approve"},
         )
     assert manager.state.summary_approved is None
-    decision(manager, text="כן, בדיוק")
+    decision(manager, text="Yes, exactly")
     assert manager.state.summary_approved == manager.state.requirements_version
 
 

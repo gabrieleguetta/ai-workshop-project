@@ -42,6 +42,11 @@ def parse_response(text: str) -> Response:
 
 
 def safe_failure(text: str, provider: str, code: Optional[int] = None) -> ProviderError:
+    reason = ""
+    try:  # OpenRouter's own error message (never contains the key), e.g. a guardrail block
+        reason = str(json.loads(text.split(" ", 1)[1])["error"]["message"]).split("\n")[0][:200]
+    except Exception:
+        pass
     text = text.casefold()
     if any(
         word in text
@@ -74,6 +79,7 @@ def safe_failure(text: str, provider: str, code: Optional[int] = None) -> Provid
         f"{provider}: request failed"
         + (f" (exit/status {code})" if code is not None else "")
         + ". Check the connection, model availability, and provider setup."
+        + (f" Reason: {reason}" if reason else "")
     )
 
 
@@ -89,6 +95,7 @@ class OpenRouterProvider:
             )
         self.key, self.model, self.timeout = key, model, timeout
         self.client = client
+        self.name = f"OpenRouter ({model})"
 
     def complete(self, messages: list[dict[str, str]]) -> Response:
         body = {
@@ -207,10 +214,11 @@ class CodexProvider:
             raise ProviderError(
                 "Codex is not signed in. Run `codex login`, then `codex login status`."
             )
+        model = self.model or "CLI default model"
         if "api key" in status or "api_key" in status or os.environ.get("CODEX_API_KEY"):
-            self.name = "Codex (API-key authentication; usage-based billing)"
+            self.name = f"Codex ({model}; API-key authentication; usage-based billing)"
         elif "chatgpt" in status:
-            self.name = "Codex (ChatGPT authentication; account usage limits apply)"
+            self.name = f"Codex ({model}; ChatGPT authentication; account usage limits apply)"
         else:
             raise ProviderError("Codex login method is unrecognized. Check `codex login status`.")
 

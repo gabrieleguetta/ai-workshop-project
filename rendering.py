@@ -8,13 +8,9 @@ from checks import daily_checks, nutrition_ready, prices_ready
 from models import Check, Scope, Session, Target
 
 
-def tr(session: Session, english: str, hebrew: str) -> str:
-    return hebrew if session.language == "he" else english
-
-
 def scope_text(session: Session, scope: Scope) -> str:
     if scope.kind == "global":
-        return tr(session, "whole plan", "כל התכנון")
+        return "whole plan"
     if scope.kind == "day":
         return scope.id or ""
     slot = next((s for s in session.slots if s.id == scope.id), None)
@@ -22,63 +18,27 @@ def scope_text(session: Session, scope: Scope) -> str:
 
 
 def target_text(session: Session, target: Target) -> str:
-    labels = {"calories": "קלוריות", "budget": "תקציב", "time": "זמן הכנה"}
     interpretation = {
-        "maximum": (f"up to {target.high}", f"עד {target.high}"),
-        "minimum": (f"at least {target.low}", f"לפחות {target.low}"),
-        "range": (f"{target.low}–{target.high}", f"{target.low}–{target.high}"),
-        "approximate": (f"about {target.low}", f"בערך {target.low}"),
+        "maximum": f"up to {target.high}",
+        "minimum": f"at least {target.low}",
+        "range": f"{target.low}–{target.high}",
+        "approximate": f"about {target.low}",
     }
-    period = (
-        tr(session, "per day", "ליום")
-        if target.period == "day"
-        else tr(session, "per meal", "לארוחה")
-    )
-    per = (
-        tr(session, "per person", "לאדם")
-        if target.per == "person"
-        else tr(session, "all diners", "לכל הסועדים")
-    )
-    basis = {
-        "total": "זמן כולל",
-        "active": "זמן עבודה",
-        "consumption": "עלות צריכה",
-        "checkout": "עלות רכישה",
-    }
-    description = f"{tr(session, target.kind, labels[target.kind])}: " + tr(
-        session, *interpretation[target.interpretation]
-    )
+    period = "per day" if target.period == "day" else "per meal"
+    per = "per person" if target.per == "person" else "all diners"
+    description = f"{target.kind}: {interpretation[target.interpretation]}"
     description += f" {target.unit}; {period}, {per}; {scope_text(session, target.scope)}"
     if target.kind in ("time", "budget"):
-        description += "; " + tr(session, target.basis, basis[target.basis])
+        description += "; " + target.basis
     if target.period == "day" and not target.planned_subset_confirmed:
-        description += "; " + tr(
-            session, "planned portion needs agreement", "נדרש אישור החלק המתוכנן מתוך היום"
-        )
+        description += "; " + "planned portion needs agreement"
     if not target.hard:
-        description += "; " + tr(session, "preference", "העדפה")
+        description += "; " + "preference"
     return description
 
 
 def check_text(session: Session, check: Check) -> str:
-    if session.language == "en":
-        return f"{check.name}: {check.outcome.replace('_', ' ')} — {check.detail}"
-    names = {
-        "calories": "קלוריות",
-        "budget": "תקציב",
-        "time": "זמן הכנה",
-        "allergens": "אלרגנים",
-        "exclusions": "מרכיבים מוחרגים",
-        "dislikes": "העדפות מזון",
-        "dietary": "מגבלות תזונה",
-        "variety": "גיוון",
-    }
-    outcomes = {
-        "passes": "עומד בדרישה",
-        "fails": "אינו עומד בדרישה",
-        "cannot_verify": "אין מספיק נתונים לאימות",
-    }
-    return f"{names.get(check.name, 'בדיקת נתונים')}: {outcomes[check.outcome]}"
+    return f"{check.name}: {check.outcome.replace('_', ' ')} — {check.detail}"
 
 
 @dataclass
@@ -128,70 +88,52 @@ def shopping_list(session: Session) -> ShoppingList:
 
 def summary(session: Session) -> str:
     requirements = session.requirements
-    lines = [tr(session, "Planning summary", "סיכום התכנון") + f" v{session.requirements_version}"]
+    lines = ["Planning summary" + f" v{session.requirements_version}"]
     lines += [
         f"- {s.day} / {s.label}: {s.diners} "
-        + tr(session, "diners", "סועדים")
+        + "diners"
         + (f"; {s.circumstances}" if s.circumstances else "")
         for s in session.slots
     ]
-    labels = {
-        "allergies": "אלרגיות",
-        "dietary": "מגבלות תזונה",
-        "dislikes": "מזונות לא רצויים",
-        "exclusions": "מרכיבים מוחרגים",
-        "cuisines": "מטבחים אהובים",
-        "favorites": "מנות ומרכיבים אהובים",
-    }
-    for name, label in labels.items():
+    for name in ("allergies", "dietary", "dislikes", "exclusions", "cuisines", "favorites"):
         values = getattr(requirements, name)
         lines.append(
-            f"- {tr(session, name, label)}: "
+            f"- {name}: "
             + (
                 ", ".join(values)
                 if values
-                else tr(
-                    session,
-                    "none specified" if values == [] else "unanswered",
-                    "ללא" if values == [] else "טרם נענה",
-                )
+                else ("none specified" if values == [] else "unanswered")
             )
         )
     for target in requirements.targets:
         lines.append("- " + target_text(session, target))
 
     def yes_no(value):
-        return tr(session, "yes", "כן") if value else tr(session, "no", "לא")
+        return "yes" if value else "no"
 
-    for key, he in (
-        ("repeat_dishes", "חזרה על מנות"),
-        ("leftovers", "שאריות"),
-        ("batch_cooking", "בישול למספר ארוחות"),
-    ):
+    for key in ("repeat_dishes", "leftovers", "batch_cooking"):
         value = getattr(requirements, key)
         if value is not None:
-            lines.append(f"- {tr(session, key, he)}: {yes_no(value)}")
+            lines.append(f"- {key}: {yes_no(value)}")
     for pref in session.preferences:
         if pref.active:
             lines.append(f"- {pref.text} ({scope_text(session, pref.scope)})")
-    for kind, he in (("calories", "קלוריות"), ("budget", "תקציב"), ("time", "זמן הכנה")):
+    for kind in ("calories", "budget", "time"):
         if not any(t.kind == kind for t in requirements.targets):
-            lines.append(f"- {tr(session, kind, he)}: " + tr(session, "no target", "ללא יעד"))
+            lines.append(f"- {kind}: no target")
     return "\n".join(lines)
 
 
 def menu(session: Session) -> str:
-    lines = [tr(session, "Current menu", "התפריט הנוכחי") + f" — v{session.revision}"]
+    lines = ["Current menu" + f" — v{session.revision}"]
     for slot in session.slots:
         meal = session.meals.get(slot.id)
         if meal is None:
             continue
-        approved = (
-            tr(session, "approved", "אושר") if meal.approved else tr(session, "draft", "טיוטה")
-        )
+        approved = "approved" if meal.approved else "draft"
         lines.append(
             f"- {slot.day} / {slot.label}: {meal.name} — {slot.diners} "
-            + tr(session, "servings", "מנות")
+            + "servings"
             + f" [{approved}; {slot.id} v{meal.version}]"
         )
         if meal.description:
@@ -199,25 +141,16 @@ def menu(session: Session) -> str:
         if meal.recipe:
             recipe = meal.recipe
             times = [
-                f"{value:g} " + tr(session, f"min {kind}", f"דקות {he}")
-                for value, kind, he in (
-                    (recipe.active_minutes, "active", "עבודה"),
-                    (recipe.total_minutes, "total", "בסך הכול"),
+                f"{value:g} " + f"min {kind}"
+                for value, kind in (
+                    (recipe.active_minutes, "active"),
+                    (recipe.total_minutes, "total"),
                 )
                 if value is not None and recipe.timing_servings == slot.diners
             ]
-            lines.append(
-                "  " + ("; ".join(times) or tr(session, "Time unavailable", "זמן הכנה לא זמין"))
-            )
+            lines.append("  " + ("; ".join(times) or "Time unavailable"))
         else:
-            lines.append(
-                "  "
-                + tr(
-                    session,
-                    "Provisional suggestion; recipe and time pending integration",
-                    "הצעה ראשונית; מתכון וזמן הכנה ממתינים לחיבור נתונים",
-                )
-            )
+            lines.append("  " + "Provisional suggestion; recipe and time pending integration")
         nutrition, price = meal.nutrition.total, meal.prices.total
         if (
             nutrition_ready(meal)
@@ -227,7 +160,7 @@ def menu(session: Session) -> str:
             and nutrition.kcal is not None
         ):
             protein = (
-                f"; {nutrition.protein_g:g} " + tr(session, "g protein", "גרם חלבון")
+                f"; {nutrition.protein_g:g} " + "g protein"
                 if nutrition.protein_g is not None
                 else ""
             )
@@ -235,31 +168,24 @@ def menu(session: Session) -> str:
                 f"  {nutrition.kcal:g} kcal"
                 + protein
                 + " / "
-                + tr(session, "all servings", "כל המנות")
-                + (tr(session, " (estimate)", " (הערכה)") if nutrition.estimated else "")
+                + "all servings"
+                + (" (estimate)" if nutrition.estimated else "")
             )
         else:
-            lines.append(
-                "  "
-                + tr(session, "Nutrition unavailable/incomplete", "נתוני תזונה חסרים או לא זמינים")
-            )
+            lines.append("  " + "Nutrition unavailable/incomplete")
         if prices_ready(meal) and price and price.amount is not None:
             lines.append(
                 f"  {price.amount:g} {price.currency} ({price.basis}; "
                 f"{price.source.name}; {price.source.observed_at or 'date unknown'})"
-                + (tr(session, " estimate", " הערכה") if price.estimated else "")
+                + (" estimate" if price.estimated else "")
             )
         else:
-            lines.append("  " + tr(session, "Cost unavailable/incomplete", "מחיר חסר או לא זמין"))
+            lines.append("  " + "Cost unavailable/incomplete")
         for check in meal.checks:
             if check.outcome == "fails":
-                lines.append(
-                    "  " + tr(session, "Conflict", "התנגשות") + ": " + check_text(session, check)
-                )
+                lines.append("  " + "Conflict" + ": " + check_text(session, check))
         if any(check.outcome == "cannot_verify" for check in meal.checks):
-            lines.append(
-                "  " + tr(session, "Technical verification pending", "אימות נתונים טרם הושלם")
-            )
+            lines.append("  " + "Technical verification pending")
     for day, checks in daily_checks(session).items():
         for check in checks:
             lines.append(f"  {day}: " + check_text(session, check))
@@ -267,20 +193,14 @@ def menu(session: Session) -> str:
 
 
 def outputs(session: Session) -> str:
-    lines = [menu(session), "", tr(session, "Recipes", "מתכונים")]
+    lines = [menu(session), "", "Recipes"]
     for slot in session.slots:
         meal = session.meals.get(slot.id)
         if meal is None:
             continue
         lines.append(f"{slot.day} / {slot.label}: {meal.name}")
         if meal.recipe is None:
-            lines.append(
-                tr(
-                    session,
-                    "Recipe details pending integration.",
-                    "פרטי המתכון ממתינים לחיבור נתונים.",
-                )
-            )
+            lines.append("Recipe details pending integration.")
             continue
         recipe = meal.recipe
         lines += [
@@ -289,20 +209,14 @@ def outputs(session: Session) -> str:
         ]
         lines += [f"  {n}. {step}" for n, step in enumerate(recipe.instructions, 1)]
         if not recipe.instructions or not recipe.ingredients_complete:
-            lines.append(tr(session, "Recipe details incomplete", "פרטי המתכון אינם מלאים"))
+            lines.append("Recipe details incomplete")
         lines.append(f"  {recipe.source.name}: {recipe.source.reference or recipe.id}")
     shopping = shopping_list(session)
     lines += [
         "",
-        tr(session, "Shopping list", "רשימת קניות")
+        "Shopping list"
         + " — "
-        + (
-            tr(session, "complete", "מלאה")
-            if shopping.complete
-            else tr(
-                session, "PARTIAL: recipes or quantities missing", "חלקית: חסרים מתכונים או כמויות"
-            )
-        ),
+        + ("complete" if shopping.complete else "PARTIAL: recipes or quantities missing"),
     ]
     lines += [
         f"- {name}: {amount:g} {unit} ({basis})" for name, amount, unit, basis in shopping.items

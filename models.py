@@ -254,7 +254,6 @@ class Replacement(Model):
 
 class Session(Model):
     stage: str = "collect"
-    language: Literal["en", "he"] = "en"
     slots: list[Slot] = Field(default_factory=list)
     requirements: Requirements = Field(default_factory=Requirements)
     preferences: list[Preference] = Field(default_factory=list)

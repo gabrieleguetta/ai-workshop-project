@@ -136,6 +136,16 @@ def test_search_falls_back_to_words_then_ingredient(monkeypatch):
     assert ("filter.php", "chickpea_stew") in calls
 
 
+def test_search_words_rank_by_relevance(monkeypatch):
+    eggplant = meal("7", "Grilled eggplant with coconut milk", Eggplant="2")
+    chicken = meal("8", "Chicken Salad", Chicken="300g")
+    pages = {"grilled": [eggplant], "chicken": [chicken], "salad": [chicken]}
+    monkeypatch.setattr(ft, "_get", lambda endpoint, s="", **_: pages.get(s, []))
+    result = ft.FoodTools().search_recipes(query("grilled chicken salad"))
+    assert [r.name for r in result.recipes] == ["Chicken Salad"]  # "grilled" alone is too weak
+    assert ft._score(meal("9", "Lemongrass beef"), ["lemon"]) == 0  # whole words only
+
+
 def test_search_not_found_and_errors(monkeypatch):
     monkeypatch.setattr(ft, "_get", lambda endpoint, **_: [])
     assert ft.FoodTools().search_recipes(query()).status == "not_found"
@@ -146,3 +156,32 @@ def test_search_not_found_and_errors(monkeypatch):
     monkeypatch.setattr(ft, "_get", down)
     result = ft.FoodTools().search_recipes(query())
     assert result.status == "error" and result.recipes == []
+
+
+def test_mismatched_recipe_does_not_keep_model_description(monkeypatch):
+    from conftest import ready
+
+    monkeypatch.setattr(
+        ft, "_get", lambda endpoint, **_: [SHAKSHUKA] if endpoint == "search.php" else []
+    )
+    manager = ready(1, tools=ft.FoodTools())
+    manager.apply(
+        "propose",
+        {
+            "dishes": [
+                {"slot_id": "d1-dinner", "name": "Egg skillet", "description": "Grilled chicken"}
+            ]
+        },
+    )
+    meal = manager.state.meals["d1-dinner"]
+    assert meal.name == "Shakshuka" and "Egg skillet" in meal.description
+
+
+def test_negated_model_tags_are_not_conflicts():
+    from conftest import ready
+
+    manager = ready(1)
+    manager.state.requirements.dislikes = ["mushrooms"]
+    dish = {"slot_id": "d1-dinner", "name": "Soup", "tags": ["no mushrooms", "nut-free"]}
+    manager.apply("propose", {"dishes": [dish]})
+    assert manager.state.meals["d1-dinner"].checks[1].outcome != "fails"
