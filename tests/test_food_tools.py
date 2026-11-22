@@ -185,3 +185,22 @@ def test_negated_model_tags_are_not_conflicts():
     dish = {"slot_id": "d1-dinner", "name": "Soup", "tags": ["no mushrooms", "nut-free"]}
     manager.apply("propose", {"dishes": [dish]})
     assert manager.state.meals["d1-dinner"].checks[1].outcome != "fails"
+
+    manager.state.requirements.allergies = ["peanuts"]
+    dish["tags"] = ["gluten-free; contains peanuts"]  # negation stays on its own ingredient
+    manager.apply("propose", {"dishes": [dish]})
+    allergens = [c for c in manager.state.meals["d1-dinner"].checks if c.name == "allergens"]
+    assert allergens[0].outcome == "fails"
+
+
+def test_one_failed_word_search_keeps_other_results(monkeypatch):
+    chicken = meal("8", "Chicken Salad", Chicken="300g")
+
+    def fake(endpoint, s="", **_):
+        if s == "curry":
+            raise TimeoutError("timed out")
+        return [chicken] if s == "chicken" else []
+
+    monkeypatch.setattr(ft, "_get", fake)
+    result = ft.FoodTools().search_recipes(query("chicken curry"))
+    assert result.status == "ok" and [r.name for r in result.recipes] == ["Chicken Salad"]

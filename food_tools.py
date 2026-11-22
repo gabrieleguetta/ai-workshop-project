@@ -314,7 +314,15 @@ def _search(dish: str) -> list[dict]:
         return meals[:10]
     words = [w for w in re.findall(r"[a-z]+", dish.casefold()) if len(w) > 2 and w not in STOP]
     # ponytail: word-overlap ranking; a real dish->recipe matcher would need TheMealDB categories
-    found = {m["idMeal"]: m for w in words[:5] for m in _get("search.php", s=w)}
+    found: dict[str, dict] = {}
+    error: Optional[Exception] = None
+    for w in words[:5]:  # one failed word must not discard recipes the others found
+        try:
+            found.update((m["idMeal"], m) for m in _get("search.php", s=w))
+        except Exception as e:
+            error = e
+    if error and not found:
+        raise error
     ranked = sorted(found.values(), key=lambda m: _score(m, words), reverse=True)
     meals = [m for m in ranked if _score(m, words) >= 2]  # at least one real (non-method) match
     if not meals:  # dish may be a main ingredient, e.g. "chicken breast"

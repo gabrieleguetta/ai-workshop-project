@@ -313,3 +313,17 @@ def test_env_api_key_override_is_not_described_as_subscription_auth(monkeypatch)
         command=["test-codex"], runner=lambda *a, **kw: result(stderr="Logged in using ChatGPT")
     )
     assert "API-key authentication" in provider.name
+
+
+def test_openrouter_error_reason_is_redacted():
+    secret = "sk-or-v1-abc123def456ghi789"
+    message = f"Upstream failed for key {secret} (Bearer {secret}); try another model"
+
+    def handler(request):
+        return httpx.Response(500, json={"error": {"message": message}})
+
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        provider = OpenRouterProvider("test-key", "configured-model", client=client)
+        with pytest.raises(ProviderError, match="try another model") as error:
+            provider.complete([])
+    assert secret not in str(error.value)

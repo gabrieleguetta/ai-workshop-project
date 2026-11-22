@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import tempfile
@@ -45,6 +46,8 @@ def safe_failure(text: str, provider: str, code: Optional[int] = None) -> Provid
     reason = ""
     try:  # OpenRouter's own error message (never contains the key), e.g. a guardrail block
         reason = str(json.loads(text.split(" ", 1)[1])["error"]["message"]).split("\n")[0][:200]
+        # Upstream may echo credentials: hide bearer values and long token-like strings.
+        reason = re.sub(r"(?i)bearer\s+\S+|(?=\S*\d)\S{16,}", "[redacted]", reason)
     except Exception:
         pass
     text = text.casefold()

@@ -110,15 +110,16 @@ def selected_targets(session: Session, slot: Slot) -> list[Target]:
     return list(targets.values())
 
 
+# "no mushrooms", "without nuts or dairy", "nut-free", "dairy free"
+NEGATED = re.compile(r"\b(?:no|without)\s+[\w-]+(?:\s*(?:,|or|and|&)\s*[\w-]+)*|[\w-]+[- ]free\b")
+
+
 def check_meal(session: Session, meal: Meal, slot: Slot) -> list[Check]:
     recipe = meal.recipe
     results: list[Check] = []
     # Names and provider allergen metadata can establish a conflict, never package safety.
-    # Skip negated model tags: "no mushrooms" / "nut-free" must not count as containing them.
-    negated = re.compile(r"\b(no|without|free)\b|-free\b")
-    names = [meal.name.casefold()] + [
-        t.casefold() for t in meal.tags if not negated.search(t.casefold())
-    ]
+    # Strip only the negated phrase: "gluten-free; contains peanuts" still names peanuts.
+    names = [meal.name.casefold()] + [NEGATED.sub(" ", t.casefold()) for t in meal.tags]
     if recipe:
         names += [i.name.casefold() for i in recipe.ingredients]
         names += [a.casefold() for i in recipe.ingredients for a in i.allergens]
