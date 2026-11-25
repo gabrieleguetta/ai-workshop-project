@@ -6,14 +6,14 @@ Turkey Mince,Turkey,150,19.7,0,8,,meat
 Minced Beef,Ground Beef|Lean Minced Beef|Beef Mince|Lean Minced Steak,215,18.6,0,15,,meat
 Beef,Beef Brisket|Beef Fillet|Stewing Beef|Beef Shin|Steak|Veal|Sirloin Steak|Rump Steak|Braising Steak,180,20,0,11,200,meat
 Lamb,Lamb Mince|Lamb Leg|Lamb Shoulder|Lamb Loin Chops,282,16.6,0,23.4,200,meat
-Pork,Pork Chops|Minced Pork|Ground Pork|Pork Belly|Pork Shoulder,242,27,0,14,200,meat|pork
+Pork,Pork Chops|Minced Pork|Ground Pork|Pork Belly|Pork Shoulder|Pork Tenderloin|Pork belly slices,242,27,0,14,200,meat|pork
 Bacon,Pancetta|Bacon Rashers,417,13,1.4,40,25,meat|pork
 Chorizo,,455,24,1.9,38,60,meat|pork
 Ham,Parma Ham|Prosciutto,145,21,1.5,5.5,25,meat|pork
 Sausages,Sausage|Italian Fennel Sausages,301,12,2,27,60,meat|pork
 Salmon,Salmon Fillets|Smoked Salmon,208,20,0,13,,fish
 Tuna,Tuna Steak,116,25.5,0,0.8,,fish
-White Fish,White Fish Fillets|Cod|Haddock|Monkfish|Sea Bass|Tilapia|Smoked Haddock|Salt Cod|Hake|Pollock,82,18,0,0.7,,fish
+White Fish,White Fish Fillets|Cod|Haddock|Monkfish|Sea Bass|Tilapia|Smoked Haddock|Salt Cod|Hake|Pollock|Fish fillet|Barramundi,82,18,0,0.7,,fish
 Prawns,King Prawns|Tiger Prawns|Shrimp,85,20,0.2,0.5,15,shellfish
 Squid,Baby Squid|Calamari,92,15.6,3.1,1.4,,shellfish
 Eggs,Egg|Free-range Egg|Free-range Eggs,143,12.6,0.7,9.5,50,eggs
@@ -28,7 +28,7 @@ Hummus,Houmous,166,7.9,14.3,9.6,,sesame
 Milk,Whole Milk|Semi-skimmed Milk|Skimmed Milk,61,3.2,4.8,3.3,,milk
 Condensed Milk,Sweetened Condensed Milk,321,7.9,54.4,8.7,,milk
 Greek Yogurt,Greek Yoghurt,73,10,3.9,1.9,,milk
-Yogurt,Natural Yogurt|Plain Yogurt|Yoghurt|Full Fat Yogurt,61,3.5,4.7,3.3,,milk
+Yogurt,Natural Yogurt|Plain Yogurt|Yoghurt|Full Fat Yogurt|Natural Yoghurt,61,3.5,4.7,3.3,,milk
 Cream,Double Cream|Heavy Cream|Single Cream|Whipping Cream,340,2.1,2.8,36,,milk
 Sour Cream,Creme Fraiche|Soured Cream,198,2.4,4.6,19,,milk
 Cottage Cheese,,98,11.1,3.4,4.3,,milk
@@ -45,7 +45,7 @@ Couscous,,376,12.8,77.4,0.6,,gluten
 Bulgur Wheat,Bulgur,342,12.3,75.9,1.3,,gluten
 Quinoa,,368,14.1,64.2,6.1,,
 Rolled Oats,Oats|Porridge Oats|Oatmeal,379,13.2,67.7,6.5,,gluten
-Bread,Baguette|Crusty Bread|Ciabatta|Wholegrain Bread|Bread Rolls|Burger Buns|Buns,265,9,49,3.2,35,gluten
+Bread,Baguette|Crusty Bread|Ciabatta|Wholegrain Bread|Bread Rolls|Burger Buns|Buns|Rye Bread,265,9,49,3.2,35,gluten
 Pita Bread,Pitta Bread|Naan Bread,275,9.1,55.7,1.2,60,gluten
 Tortillas,Flour Tortilla|Flour Tortillas|Corn Tortillas|Wraps,304,8,50,8,45,gluten
 Breadcrumbs,Panko Breadcrumbs,395,13,72,5.3,,gluten
@@ -53,8 +53,8 @@ Puff Pastry,Shortcrust Pastry|Filo Pastry,551,7.4,45,38,,gluten|milk
 Flour,Plain Flour|All Purpose Flour|Self-raising Flour|White Flour|Bread Flour|Strong White Bread Flour|Wholemeal Flour,364,10.3,76.3,1,,gluten
 Cornstarch,Corn Flour|Cornflour|Potato Starch|Starch|Cornmeal|Polenta,381,0.3,91,0.1,,
 Baking Powder,Bicarbonate Of Soda|Baking Soda,53,0,28,0,,
-Yeast,Dried Yeast|Fast Action Yeast,325,40,41,7.6,,
-Potatoes,Potato|Floury Potatoes|Small Potatoes|New Potatoes|Charlotte Potatoes|Yukon Gold Potatoes|Russet Potato|Russet Potatoes|Maris Piper Potatoes,77,2,17.5,0.1,170,
+Yeast,Dried Yeast|Fast Action Yeast|Instant Yeast,325,40,41,7.6,,
+Potatoes,Potato|Floury Potatoes|Small Potatoes|New Potatoes|Charlotte Potatoes|Yukon Gold Potatoes|Russet Potato|Russet Potatoes|Maris Piper Potatoes|Jersey Royal Potatoes,77,2,17.5,0.1,170,
 Sweet Potatoes,Sweet Potato,86,1.6,20.1,0.1,200,
 Onion,Onions|Yellow Onion|Chopped Onion,40,1.1,9.3,0.1,150,
 Spring Onions,Scallions|Green Onions,32,1.8,7.3,0.2,15,
@@ -62,7 +62,7 @@ Shallots,Challots,72,2.5,16.8,0.1,30,
 Leek,Leeks,61,1.5,14,0.3,200,
 Garlic,Garlic Clove|Garlic Cloves|Minced Garlic|Garlic Powder,149,6.4,33,0.5,5,
 Ginger,Ginger Root|Ginger Paste|Ginger Garlic Paste|Lemongrass|Lemongrass Stalks|Galangal,80,1.8,18,0.8,10,
-Chilli,Chillies|Chili|Jalapeno|Scotch Bonnet|Birds Eye Chilli|Birds-eye Chillies|Red Chillies|Green Chillies,40,1.9,8.8,0.4,15,
+Chilli,Chillies|Chili|Jalapeno|Scotch Bonnet|Birds Eye Chilli|Birds-eye Chillies|Red Chillies|Green Chillies|Habanero Pepper,40,1.9,8.8,0.4,15,
 Tomato,Tomatoes|Vine Tomatoes|Plum Tomatoes|Cherry Tomatoes|Grape Tomatoes,18,0.9,3.9,0.2,120,
 Canned Tomatoes,Chopped Tomatoes|Tinned Tomatoes|Diced Tomatoes|Passata|Tomato Sauce,24,1.2,4.6,0.3,,
 Tomato Puree,Tomato Paste,82,4.3,18.9,0.5,,
@@ -76,7 +76,7 @@ Aubergine,Aubergines|Eggplant|Egg Plants|Baby Aubergine,25,1,5.9,0.2,300,
 Red Pepper,Green Pepper|Yellow Pepper|Bell Pepper|Peppers,31,1,6,0.3,150,
 Cucumber,Persian Cucumber,15,0.7,3.6,0.1,150,
 Lettuce,Little Gem Lettuce|Iceberg Lettuce|Rocket|Salad Leaves,15,1.4,2.9,0.2,300,
-Mushrooms,Chestnut Mushroom|Button Mushrooms|Shiitake Mushrooms|Wild Mushrooms,22,3.1,3.3,0.3,15,
+Mushrooms,Chestnut Mushroom|Button Mushrooms|Shiitake Mushrooms|Wild Mushrooms|Oyster Mushrooms,22,3.1,3.3,0.3,15,
 Cabbage,White Cabbage|Red Cabbage|Sauerkraut|Pak Choi|Bok Choy,25,1.3,5.8,0.1,900,
 Peas,Frozen Peas|Sugar Snap Peas|Broad Beans|Edamame Beans,81,5.4,14.5,0.4,,
 Green Beans,French Beans,31,1.8,7,0.2,,
@@ -102,7 +102,7 @@ Peanuts,Roasted Peanuts,567,25.8,16.1,49.2,,peanuts
 Almonds,Flaked Almonds|Ground Almonds,579,21.2,21.6,49.9,,tree nuts
 Walnuts,Pecan Nuts|Pecans,654,15.2,13.7,65.2,,tree nuts
 Cashew Nuts,Cashews|Pine Nuts|Hazelnuts,553,18.2,30.2,43.9,,tree nuts
-Tahini,,595,17,21.2,53.8,,sesame
+Tahini,Tahini Paste,595,17,21.2,53.8,,sesame
 Coconut Milk,Coconut Cream,197,2,2.8,21.3,,
 Desiccated Coconut,Coconut,660,6.9,24,64.5,,
 Almond Milk,,15,0.6,0.3,1.2,,tree nuts
@@ -119,11 +119,11 @@ Worcestershire Sauce,,78,0,19.5,0,,fish
 Tomato Ketchup,Ketchup,112,1.7,26,0.1,,
 Mayonnaise,Mayo,680,1,0.6,75,,eggs
 Mustard,Dijon Mustard|English Mustard|Wholegrain Mustard,66,4,5.8,3.3,,
-Hot Sauce,Hotsauce|Tabasco Sauce|Sriracha|Sweet Chilli Sauce|Chilli Sauce,12,0.5,2,0.4,,
-Vinegar,White Vinegar|Red Wine Vinegar|White Wine Vinegar|Rice Vinegar|Apple Cider Vinegar|Balsamic Vinegar|Malt Vinegar|Sherry Vinegar,20,0,0.6,0,,
+Hot Sauce,Hotsauce|Tabasco Sauce|Sriracha|Sweet Chilli Sauce|Chilli Sauce|Tobasco Sauce,12,0.5,2,0.4,,
+Vinegar,White Vinegar|Red Wine Vinegar|White Wine Vinegar|Rice Vinegar|Apple Cider Vinegar|Balsamic Vinegar|Malt Vinegar|Sherry Vinegar|Cider Vinegar,20,0,0.6,0,,
 Wine,White Wine|Red Wine|Dry White Wine|Sherry|Dry Sherry|Cooking Wine|Rice Wine,83,0.1,2.6,0,,
 Chicken Stock,Chicken Stock Cube|Chicken Broth|Chicken Stock Concentrate,6,0.6,0.4,0.2,10,meat
-Beef Stock,Beef Stock Cube|Beef Stock Cubes|Beef Broth|Hot Beef Stock|Beef Stock Concentrate,7,1.1,0.1,0.2,10,meat
+Beef Stock,Beef Stock Cube|Beef Stock Cubes|Beef Broth|Hot Beef Stock|Beef Stock Concentrate|Lamb Stock,7,1.1,0.1,0.2,10,meat
 Vegetable Stock,Vegetable Stock Cube|Vegetable Broth,5,0.2,0.9,0.1,10,
 Salt,Sea Salt|Kosher Salt|Table Salt|Celery Salt|Onion Salt,0,0,0,0,1,
 Water,Warm Water|Cold Water|Boiling Water|Ice,0,0,0,0,,
@@ -131,12 +131,12 @@ Black Pepper,Pepper|Ground Black Pepper|White Pepper,251,10.4,64,3.3,1,
 Chilli Powder,Chili Powder|Cayenne Pepper|Chilli Flakes|Red Chilli Flakes|Red Pepper Flakes|Red Chilli Powder,282,13.5,50,14,1,
 Paprika,Smoked Paprika|Smoky Paprika|Sweet Paprika,282,14,54,13,2,
 Cumin,Ground Cumin|Cumin Seeds,375,17.8,44,22,2,
-Coriander,Cilantro|Coriander Leaves|Fresh Coriander|Ground Coriander|Coriander Seeds,23,2.1,3.7,0.5,10,
+Coriander,Cilantro|Coriander Leaves|Fresh Coriander|Ground Coriander|Coriander Seeds|Cilantro Leaves,23,2.1,3.7,0.5,10,
 Cinnamon,Ground Cinnamon|Cinnamon Stick,247,4,81,1.2,3,
 Turmeric,Turmeric Powder|Ground Turmeric,312,9.7,67,3.3,2,
 Nutmeg,Ground Nutmeg,525,5.8,49,36,1,
 Allspice,Cloves|Cardamom|Green Cardamom Pods|Star Anise|Saffron|Fennel Seeds|Mustard Seeds|Caraway Seed|Black Cardamom Pods|Juniper Berries,290,8,68,9,1,
-Curry Powder,Garam Masala|Harissa Spice|Ras el hanout|Cajun|Fajita Seasoning|Mixed Spice|Italian Seasoning|Jerk|Five Spice|All-purpose Seasoning|Chinese Five Spice,325,14,58,14,2,
+Curry Powder,Garam Masala|Harissa Spice|Ras el hanout|Cajun|Fajita Seasoning|Mixed Spice|Italian Seasoning|Jerk|Five Spice|All-purpose Seasoning|Chinese Five Spice|Chinese five spice powder,325,14,58,14,2,
 Parsley,Chopped Parsley|Fresh Parsley|Flat Leaf Parsley|Freshly Chopped Parsley,36,3,6.3,0.8,10,
 Mint,Mint Leaves|Fresh Mint,70,3.8,15,0.9,5,
 Basil,Basil Leaves|Fresh Basil,23,3.2,2.7,0.6,5,
@@ -155,3 +155,18 @@ Fish Stock,Fish Stock Cube,8,1.2,0.3,0.3,10,fish
 Curry Paste,Thai Red Curry Paste|Thai Green Curry Paste|Madras Paste|Massaman Curry Paste|Red Curry Paste|Green Curry Paste,140,3,14,8,,
 Tamarind Paste,Tamarind Ball|Tamarind,239,2.8,62.5,0.6,,
 Peanut Oil,Groundnut Oil|Ground Nut Oil,884,0,0,100,,peanuts
+Fenugreek,Fenugreek Seeds|Fenugreek Leaves|Kasuri Methi,323,23,58.4,6.4,2,
+Jerusalem Artichokes,Jerusalem Artichoke|Sunchokes,73,2,17.4,0,40,
+Radish,Radishes,16,0.7,3.4,0.1,10,
+Capers,Caper,23,2.4,4.9,0.9,,
+Semolina,,360,12.7,72.8,1.1,,gluten
+Orange Juice,,45,0.7,10.4,0.2,,
+Brandy,Cognac,231,0,0,0,,
+Mango,Mangoes,60,0.8,15,0.4,200,
+Buckwheat,,343,13.3,71.5,3.4,,
+Poppy Seeds,,525,18,28.1,41.6,,
+Sardines,,208,24.6,0,11.5,,fish
+Chicken Liver,Chicken Livers,119,16.9,0.7,4.8,,meat
+Mirin,,241,0.2,43,0,,
+Sake,,134,0.5,5,0,,
+Water Chestnut,Water Chestnuts,97,1.4,23.9,0.1,,

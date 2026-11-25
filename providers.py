@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import tempfile
@@ -41,7 +42,20 @@ def parse_response(text: str) -> Response:
         ) from None
 
 
-def safe_failure(text: str, provider: str, code: Optional[int] = None) -> ProviderError:
+def safe_failure(
+    text: str, provider: str, code: Optional[int] = None, *, secret: str = ""
+) -> ProviderError:
+    reason = ""
+    try:
+        reason = str(json.loads(text.split(" ", 1)[1])["error"]["message"])
+        if secret:
+            reason = reason.replace(secret, "[redacted]")
+        # Upstream may echo credentials: hide bearer values and long token-like strings.
+        reason = re.sub(r"(?i)bearer\s+\S+|(?=\S*\d)\S{16,}", "[redacted]", reason)
+        # Truncation must follow redaction so a clipped key cannot escape matching.
+        reason = reason.split("\n", 1)[0][:200]
+    except Exception:
+        pass
     text = text.casefold()
     if any(
         word in text
@@ -74,6 +88,7 @@ def safe_failure(text: str, provider: str, code: Optional[int] = None) -> Provid
         f"{provider}: request failed"
         + (f" (exit/status {code})" if code is not None else "")
         + ". Check the connection, model availability, and provider setup."
+        + (f" Reason: {reason}" if reason else "")
     )
 
 
@@ -89,6 +104,7 @@ class OpenRouterProvider:
             )
         self.key, self.model, self.timeout = key, model, timeout
         self.client = client
+        self.name = f"OpenRouter ({model})"
 
     def complete(self, messages: list[dict[str, str]]) -> Response:
         body = {
@@ -124,12 +140,15 @@ class OpenRouterProvider:
             raise ProviderError("OpenRouter connection failed. Check network access.") from None
         if response.status_code >= 400:
             raise safe_failure(
-                str(response.status_code) + " " + response.text, "OpenRouter", response.status_code
+                str(response.status_code) + " " + response.text,
+                "OpenRouter",
+                response.status_code,
+                secret=self.key,
             )
         try:
             data = response.json()
             if "error" in data:
-                raise safe_failure(str(data["error"]), "OpenRouter")
+                raise safe_failure(str(data["error"]), "OpenRouter", secret=self.key)
             content = data["choices"][0]["message"]["content"]
             if not isinstance(content, str):
                 raise ValueError("Missing content")
@@ -207,10 +226,11 @@ class CodexProvider:
             raise ProviderError(
                 "Codex is not signed in. Run `codex login`, then `codex login status`."
             )
+        model = self.model or "CLI default model"
         if "api key" in status or "api_key" in status or os.environ.get("CODEX_API_KEY"):
-            self.name = "Codex (API-key authentication; usage-based billing)"
+            self.name = f"Codex ({model}; API-key authentication; usage-based billing)"
         elif "chatgpt" in status:
-            self.name = "Codex (ChatGPT authentication; account usage limits apply)"
+            self.name = f"Codex ({model}; ChatGPT authentication; account usage limits apply)"
         else:
             raise ProviderError("Codex login method is unrecognized. Check `codex login status`.")
 

@@ -4,7 +4,7 @@ Final project for **Workshop in Developing Human–AI Collaborative Systems** (B
 **Team:** Gabriele Guetta, Guy Gedalia.
 
 A Python terminal conversation that plans the user's requested days, meals and servings.
-English and Hebrew are supported. Every run starts with fresh preferences, conversation,
+English only. Every run starts with fresh preferences, conversation,
 approvals and menu. Earlier planning sessions are never restored.
 
 ## Install and run
@@ -21,8 +21,8 @@ python main.py
 
 On macOS/Linux use `source .venv/bin/activate` and `cp .env.example .env`.
 Real `.env` files are ignored. Never commit credentials or Codex authentication caches.
-Type naturally, for example “Plan Monday lunch and dinner for two; dinner must be quick”
-or “תכנן לי ארוחת ערב למחר לשני אנשים”. Type `exit` / `יציאה`, or send EOF, to leave.
+Type naturally, for example “Plan Monday lunch and dinner for two; dinner must be quick”.
+Type `exit`, or send EOF, to leave.
 
 ## Choose a model provider
 
@@ -93,9 +93,12 @@ never calls these tools or supplies their numbers.
 
 How the data is mapped:
 
-- **Search:** first by dish name, then by the dish's longer words ("chickpea curry" → "chickpea"),
-  then by main ingredient. Candidates that clash with known allergies, exclusions, dislikes or
-  dietary needs are ranked last. After that, recipes the tables fully cover come first.
+- **Search:** first by exact dish name. Otherwise each meaningful word is searched and results
+  are ranked by whole-word overlap (a word in the recipe name counts most, in its ingredients
+  less, cooking words like "grilled" least). A recipe needs at least one real match, so
+  "Grilled chicken" never returns "Grilled eggplant". Last resort: the dish as a main
+  ingredient. Candidates that clash with known allergies, exclusions, dislikes or dietary needs
+  are ranked last.
 - **Ingredient names** match by name, alias and plural ("Red Onions" → Onion, "Plain Flour" →
   Flour). Descriptor words are dropped only as a fallback. There is no fuzzy guessing, so
   "Chicken Stock" never becomes chicken.
@@ -115,7 +118,7 @@ Known limits:
 - **Rough gram conversions.** One cup is taken as 240 g for every food.
 - **No cooking times.** TheMealDB has none, so time targets show *cannot verify*.
 - **Prices are estimates,** not live supermarket quotes. They are always shown as estimates.
-- **Partial coverage.** About 45% of TheMealDB's non-dessert recipes get complete nutrition.
+- **Partial coverage.** About 58% (359 of 623) of TheMealDB's non-dessert recipes get complete nutrition.
   The rest show *unavailable* until missing ingredients are added to the CSVs. To add one, put a
   row (with aliases) in `nutrition.csv` and a matching row in `prices.csv`.
 
