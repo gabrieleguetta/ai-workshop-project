@@ -42,12 +42,18 @@ def parse_response(text: str) -> Response:
         ) from None
 
 
-def safe_failure(text: str, provider: str, code: Optional[int] = None) -> ProviderError:
+def safe_failure(
+    text: str, provider: str, code: Optional[int] = None, *, secret: str = ""
+) -> ProviderError:
     reason = ""
-    try:  # OpenRouter's own error message (never contains the key), e.g. a guardrail block
-        reason = str(json.loads(text.split(" ", 1)[1])["error"]["message"]).split("\n")[0][:200]
+    try:
+        reason = str(json.loads(text.split(" ", 1)[1])["error"]["message"])
+        if secret:
+            reason = reason.replace(secret, "[redacted]")
         # Upstream may echo credentials: hide bearer values and long token-like strings.
         reason = re.sub(r"(?i)bearer\s+\S+|(?=\S*\d)\S{16,}", "[redacted]", reason)
+        # Truncation must follow redaction so a clipped key cannot escape matching.
+        reason = reason.split("\n", 1)[0][:200]
     except Exception:
         pass
     text = text.casefold()
@@ -134,12 +140,15 @@ class OpenRouterProvider:
             raise ProviderError("OpenRouter connection failed. Check network access.") from None
         if response.status_code >= 400:
             raise safe_failure(
-                str(response.status_code) + " " + response.text, "OpenRouter", response.status_code
+                str(response.status_code) + " " + response.text,
+                "OpenRouter",
+                response.status_code,
+                secret=self.key,
             )
         try:
             data = response.json()
             if "error" in data:
-                raise safe_failure(str(data["error"]), "OpenRouter")
+                raise safe_failure(str(data["error"]), "OpenRouter", secret=self.key)
             content = data["choices"][0]["message"]["content"]
             if not isinstance(content, str):
                 raise ValueError("Missing content")

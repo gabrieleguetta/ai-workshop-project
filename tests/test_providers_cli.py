@@ -327,3 +327,37 @@ def test_openrouter_error_reason_is_redacted():
         with pytest.raises(ProviderError, match="try another model") as error:
             provider.complete([])
     assert secret not in str(error.value)
+
+
+@pytest.mark.parametrize("secret", ["sk-review-fake-placeholder", "SECRET"])
+def test_openrouter_error_redacts_configured_key_without_token_pattern(secret):
+    message = f"Upstream failed for key {secret}; try another model"
+
+    with httpx.Client(
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(500, json={"error": {"message": message}})
+        )
+    ) as client:
+        with pytest.raises(ProviderError, match="try another model") as error:
+            OpenRouterProvider(secret, "configured-model", client=client).complete([])
+
+    assert secret not in str(error.value)
+    assert "[redacted]" in str(error.value)
+
+
+def test_openrouter_error_redacts_key_before_truncating_reason():
+    secret = "sk-or-v1-abc123def456ghi789"
+    prefix = ("Upstream request failed while validating its configuration. " * 4)[:186] + " "
+    message = prefix + secret
+    assert message[:200].endswith(secret[:13])
+
+    with httpx.Client(
+        transport=httpx.MockTransport(
+            lambda request: httpx.Response(500, json={"error": {"message": message}})
+        )
+    ) as client:
+        with pytest.raises(ProviderError) as error:
+            OpenRouterProvider(secret, "configured-model", client=client).complete([])
+
+    assert secret[:13] not in str(error.value)
+    assert "[redacted]" in str(error.value)
